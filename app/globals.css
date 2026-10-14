@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  --color-surface: #0f0f0f;
+  --color-text: #ffffff;
+  --color-muted: #a6a6a6;
+  --color-border: #1a1a1a;
+  --page-margin: 40px;
+  --section-pad: 80px;
+}
+@media (max-width: 640px) {
+  :root {
+    --page-margin: 20px;
+    --section-pad: 48px;
+  }
+}
+.container-archive {
+  width: 100%;
+  max-width: 1500px;
+  margin-inline: auto;
+}
+.img-short {
+  aspect-ratio: 4/5;
+}
+@media (min-width: 640px) {
+  .img-short {
+    aspect-ratio: auto;
+    height: max(
+      260px,
+      calc(
+        (min(100vw - var(--page-margin) * 2, 1500px) - 20px) / 2 * 1.25 - 100px
+      )
+    );
+  }
+}
+html {
+  scroll-padding-top: 59px;
+  background: var(--color-surface);
+  scroll-behavior: smooth;
+}
+body {
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  letter-spacing: -0.04em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 1px solid #fff;
+  outline-offset: 4px;
+}
+@keyframes trail {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  17% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+}
+.trail-img {
+  animation: trail 1200ms cubic-bezier(0.3, 0, 0.3, 1) forwards;
+}
+/* Page-load intro: navbar drops in, then (once its animation has finished) the hero text reveals.
+   Both use fill-mode "backwards", so nothing is left applied once they end.
+   The whole sequence is pure CSS and starts at first paint: the hero text is delayed by the
+   navbar's duration (--nav-dur) instead of waiting for JS hydration, so a slow script download
+   can no longer split the intro into two visible stages. */
+@keyframes nav-drop {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: none;
+  }
+}
+:root {
+  --nav-dur: 750ms;
+}
+.nav-drop {
+  animation: nav-drop var(--nav-dur) cubic-bezier(0.2, 0.4, 0.2, 1) backwards;
+}
+@keyframes hero-reveal {
+  0% {
+    opacity: 0;
+    filter: blur(1px);
+    transform: scale(0.975);
+  }
+  35% {
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.hero-reveal {
+  animation: hero-reveal 850ms cubic-bezier(0.2, 0.7, 0.2, 1)
+    calc(var(--nav-dur) + var(--d, 0ms)) backwards;
+}
+/* Scroll reveals (see RevealObserver): titles fade + blur out once; "fade" items only fade. */
+[data-reveal] {
+  opacity: 0;
+  filter: blur(4px);
+  transition:
+    opacity 650ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+    filter 550ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms);
+}
+[data-reveal="fade"] {
+  filter: none;
+}
+[data-reveal][data-revealed] {
+  opacity: 1;
+  filter: none;
+}
+/* Section titles: fully visible, scale .98 -> 1 and blur 4px -> 0 together, once */
+/* [data-reveal-title] {
+  transform: scale(0.96);
+  transform-origin: left center;
+  filter: blur(5px);
+  transition:
+    transform 850ms cubic-bezier(.4, 0, 0.2, 1),
+    filter 850ms cubic-bezier(.4, 0, 0.2, 1);
+} */
+
+[data-reveal-title] {
+  transform: translateY(2px) scale(0.97);
+  transform-origin: left center;
+  filter: blur(5px);
+
+  transition:
+    transform 850ms cubic-bezier(.4, 0, 0.2, 1),
+    filter 850ms cubic-bezier(.4, 0, 0.2, 1);
+}
+[data-reveal-title][data-revealed] {
+  transform: translateY(0) scale(1);
+  filter: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .trail-img,
+  .nav-drop {
+    animation: none !important;
+  }
+  .hero-reveal {
+    animation-name: hero-fade;
+    animation-duration: 400ms;
+    animation-delay: var(--d, 0ms); /* navbar has no animation here, so no extra wait */
+  }
+  [data-reveal] {
+    filter: none !important;
+  }
+   [data-reveal-title] {
+    transform: none !important;
+    filter: none !important;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
