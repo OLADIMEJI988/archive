@@ -35,6 +35,25 @@ export function Hero() {
           </p>
         </div>
       </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-8 flex justify-center max-sm:bottom-6"
+      >
+        <div
+          style={{ "--d": "180ms" } as React.CSSProperties}
+          className="hero-reveal flex items-center gap-3 text-[12px] uppercase leading-none"
+        >
+          <span>Scroll</span>
+
+          <img
+            src="/images/scroll-icon.png"
+            alt=""
+            width={265}
+            height={561}
+            className="h-[28px] w-auto max-sm:h-[24px]"
+          />
+        </div>
+      </div>
     </section>
   );
 }

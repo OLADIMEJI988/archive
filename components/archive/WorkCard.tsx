@@ -17,7 +17,7 @@ export function WorkCard({ title, caption, image, alt, short, zoom }: Props) {
           src={image}
           alt={alt}
           loading="lazy"
-          className={`h-full w-full object-cover${zoom ? " transition-transform duration-[750ms] ease-[cubic-bezier(.4,0,.2,1)] will-change-transform motion-reduce:transition-none [@media(hover:hover)]:group-hover:scale-[1.02] motion-reduce:[@media(hover:hover)]:group-hover:scale-100" : ""}`}
+          className={`h-full w-full object-cover${zoom ? " transition-transform duration-[750ms] ease-[cubic-bezier(.4,0,.2,1)] will-change-transform motion-reduce:transition-none [@media(hover:hover)]:group-hover:scale-[1.03] motion-reduce:[@media(hover:hover)]:group-hover:scale-100" : ""}`}
         />
       </div>
       <figcaption className="flex flex-col gap-1">

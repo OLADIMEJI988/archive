@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 :root {
   --color-surface: #0f0f0f;
   --color-text: #ffffff;
@@ -9,36 +10,43 @@
   --page-margin: 40px;
   --section-pad: 80px;
 }
+
 @media (max-width: 640px) {
   :root {
     --page-margin: 20px;
     --section-pad: 48px;
   }
 }
+
 .container-archive {
   width: 100%;
   max-width: 1500px;
   margin-inline: auto;
 }
+
 .img-short {
-  aspect-ratio: 4/5;
+  aspect-ratio: 4 / 5;
 }
+
 @media (min-width: 640px) {
   .img-short {
     aspect-ratio: auto;
     height: max(
       260px,
       calc(
-        (min(100vw - var(--page-margin) * 2, 1500px) - 20px) / 2 * 1.25 - 100px
+        (min(100vw - var(--page-margin) * 2, 1500px) - 20px) / 2 * 1.25 -
+          100px
       )
     );
   }
 }
+
 html {
   scroll-padding-top: 59px;
   background: var(--color-surface);
   scroll-behavior: smooth;
 }
+
 body {
   background: var(--color-surface);
   color: var(--color-text);
@@ -47,80 +55,103 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
+
 a:focus-visible,
 button:focus-visible,
 [tabindex]:focus-visible {
   outline: 1px solid #fff;
   outline-offset: 4px;
 }
+
 @keyframes trail {
   0% {
     opacity: 0;
     transform: scale(0.96);
   }
+
   17% {
     opacity: 1;
     transform: scale(1);
   }
+
   75% {
     opacity: 1;
     transform: scale(1);
   }
+
   100% {
     opacity: 0;
     transform: scale(1.02);
   }
 }
+
 .trail-img {
   animation: trail 1200ms cubic-bezier(0.3, 0, 0.3, 1) forwards;
 }
-/* Page-load intro: navbar drops in, then (once its animation has finished) the hero text reveals.
-   Both use fill-mode "backwards", so nothing is left applied once they end.
-   The whole sequence is pure CSS and starts at first paint: the hero text is delayed by the
-   navbar's duration (--nav-dur) instead of waiting for JS hydration, so a slow script download
-   can no longer split the intro into two visible stages. */
+
+/*
+ * Page-load intro:
+ * Navbar drops in first, then hero text reveals.
+ * The animation starts at first paint without waiting for JS hydration.
+ */
+
 @keyframes nav-drop {
   from {
     transform: translateY(-100%);
   }
+
   to {
     transform: none;
   }
 }
+
 :root {
   --nav-dur: 750ms;
 }
+
 .nav-drop {
-  animation: nav-drop var(--nav-dur) cubic-bezier(0.2, 0.4, 0.2, 1) backwards;
+  animation: nav-drop var(--nav-dur) cubic-bezier(0.2, 0.4, 0.2, 1)
+    backwards;
 }
+
 @keyframes hero-reveal {
   0% {
     opacity: 0;
     filter: blur(1px);
     transform: scale(0.975);
   }
+
   35% {
     filter: blur(5px);
   }
+
   100% {
     opacity: 1;
     filter: blur(0);
     transform: none;
   }
 }
+
 @keyframes hero-fade {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
+
 .hero-reveal {
   animation: hero-reveal 850ms cubic-bezier(0.2, 0.7, 0.2, 1)
     calc(var(--nav-dur) + var(--d, 0ms)) backwards;
 }
-/* Scroll reveals (see RevealObserver): titles fade + blur out once; "fade" items only fade. */
+
+/*
+ * Scroll reveals:
+ * Titles and other reveal items start blurred and transparent.
+ */
+
 [data-reveal] {
   opacity: 0;
   filter: blur(4px);
@@ -128,54 +159,197 @@ button:focus-visible,
     opacity 650ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
     filter 550ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms);
 }
+
 [data-reveal="fade"] {
   filter: none;
 }
+
 [data-reveal][data-revealed] {
   opacity: 1;
   filter: none;
 }
-/* Section titles: fully visible, scale .98 -> 1 and blur 4px -> 0 together, once */
-/* [data-reveal-title] {
-  transform: scale(0.96);
-  transform-origin: left center;
-  filter: blur(5px);
-  transition:
-    transform 850ms cubic-bezier(.4, 0, 0.2, 1),
-    filter 850ms cubic-bezier(.4, 0, 0.2, 1);
-} */
+
+/*
+ * Section titles:
+ * Slight upward movement and scale, with blur clearing on reveal.
+ */
 
 [data-reveal-title] {
   transform: translateY(2px) scale(0.97);
   transform-origin: left center;
   filter: blur(5px);
-
   transition:
-    transform 850ms cubic-bezier(.4, 0, 0.2, 1),
-    filter 850ms cubic-bezier(.4, 0, 0.2, 1);
+    transform 850ms cubic-bezier(0.4, 0, 0.2, 1),
+    filter 850ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 [data-reveal-title][data-revealed] {
   transform: translateY(0) scale(1);
   filter: none;
 }
+
+/*
+ * Navbar underline.
+ *
+ * Default: hidden, with no animation on page load.
+ * .is-hovered: draws from left to right.
+ * .is-leaving: disappears from left to right.
+ */
+
+.nav-link-underline {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.nav-link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  clip-path: inset(0 100% 0 0);
+  pointer-events: none;
+  animation: none;
+}
+
+/* Draw: the visible portion grows from left to right. */
+.group.is-hovered .nav-link-underline::after {
+  animation: underline-draw 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Undraw: the left edge of the clipped area moves to the right. */
+.group.is-leaving .nav-link-underline::after {
+  animation: underline-undraw 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes underline-draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes underline-undraw {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+/*
+ * Reduced-motion preferences.
+ */
+
 @media (prefers-reduced-motion: reduce) {
   .trail-img,
   .nav-drop {
     animation: none !important;
   }
+
   .hero-reveal {
     animation-name: hero-fade;
     animation-duration: 400ms;
-    animation-delay: var(--d, 0ms); /* navbar has no animation here, so no extra wait */
+    animation-delay: var(--d, 0ms);
   }
+
   [data-reveal] {
     filter: none !important;
   }
-   [data-reveal-title] {
+
+  [data-reveal-title] {
     transform: none !important;
     filter: none !important;
   }
+
+  .group.is-hovered .nav-link-underline::after {
+    animation: none;
+    clip-path: inset(0);
+  }
+
+  .group.is-leaving .nav-link-underline::after {
+    animation: none;
+    clip-path: inset(0 100% 0 0);
+  }
+
   * {
     transition-duration: 0.01ms !important;
   }
+}
+
+/*
+ * Footer link:
+ * Permanent 1px underline that undraws left to right,
+ * then redraws left to right when .is-animating is applied.
+ */
+
+.footer-underline-link {
+  position: relative;
+  text-decoration: none;
+}
+
+.footer-underline-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  clip-path: inset(0 0 0 0);
+  pointer-events: none;
+}
+
+.footer-underline-link.is-animating::after {
+  animation: footer-underline-sequence 1000ms linear;
+}
+
+@keyframes footer-underline-sequence {
+  /* Undraw from left to right. */
+  0% {
+    clip-path: inset(0 0 0 0);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  50% {
+    clip-path: inset(0 0 0 100%);
+  }
+
+  /* Stay hidden while resetting the clip direction. */
+  50.01% {
+    clip-path: inset(0 100% 0 0);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Redraw from left to right. */
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-underline-link.is-animating::after {
+    animation: none;
+  }
+}
+
+/*
+ * Hiding the default browser scrollbar.
+ * Scrolling (wheel, touch, keyboard, anchor links) still works.
+ */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge / IE */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, newer Edge */
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Logo } from "@/components/archive/Logo";
 import { nav } from "@/data/archive";
 
@@ -11,6 +11,10 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => setMenuOpen(false);
+
+  const [hoveredNavItem, setHoveredNavItem] = useState<string | null>(null);
+  const [leavingNavItem, setLeavingNavItem] = useState<string | null>(null);
+  const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   return (
     <header className="nav-drop fixed inset-x-0 top-0 z-20 bg-ink-950 px-[var(--page-margin)] text-white">
@@ -29,15 +33,54 @@ export function Header() {
 
         {/* Desktop navigation */}
         <ul className="hidden min-w-0 flex-1 flex-wrap justify-center gap-x-6 text-center leading-4 sm:flex">
-          {nav.map(([label, href]) => (
-            <li key={label}>
-              {NAV_ENABLED && href ? (
-                <a href={href}>{label}</a>
-              ) : (
-                <span>{label}</span>
-              )}
-            </li>
-          ))}
+          {nav.map(([label, href]) => {
+            const isHovered = hoveredNavItem === label;
+            const isLeaving = leavingNavItem === label;
+
+            return (
+              <li
+                key={label}
+                className={[
+                  "group",
+                  isHovered ? "is-hovered" : "",
+                  isLeaving ? "is-leaving" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                onMouseEnter={() => {
+                  if (leaveTimer.current) {
+                    clearTimeout(leaveTimer.current);
+                    leaveTimer.current = null;
+                  }
+
+                  setLeavingNavItem(null);
+                  setHoveredNavItem(label);
+                }}
+                onMouseLeave={() => {
+                  setHoveredNavItem(null);
+                  setLeavingNavItem(label);
+                }}
+                onAnimationEnd={(event) => {
+                  if (
+                    event.animationName === "underline-undraw" &&
+                    leavingNavItem === label
+                  ) {
+                    setLeavingNavItem(null);
+                  }
+                }}
+              >
+                {NAV_ENABLED && href ? (
+                  <a href={href} className="nav-link-underline cursor-pointer">
+                    {label}
+                  </a>
+                ) : (
+                  <span className="nav-link-underline cursor-pointer">
+                    {label}
+                  </span>
+                )}
+              </li>
+            );
+          })}
         </ul>
 
         <span className="hidden flex-1 text-right sm:block">
