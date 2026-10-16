@@ -34,8 +34,7 @@
     height: max(
       260px,
       calc(
-        (min(100vw - var(--page-margin) * 2, 1500px) - 20px) / 2 * 1.25 -
-          100px
+        (min(100vw - var(--page-margin) * 2, 1500px) - 20px) / 2 * 1.25 - 100px
       )
     );
   }
@@ -110,8 +109,7 @@ button:focus-visible,
 }
 
 .nav-drop {
-  animation: nav-drop var(--nav-dur) cubic-bezier(0.2, 0.4, 0.2, 1)
-    backwards;
+  animation: nav-drop var(--nav-dur) cubic-bezier(0.2, 0.4, 0.2, 1) backwards;
 }
 
 @keyframes hero-reveal {
@@ -338,6 +336,53 @@ button:focus-visible,
 @media (prefers-reduced-motion: reduce) {
   .footer-underline-link.is-animating::after {
     animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Film grain overlay for photographic images.
+   Add class "film-grain" to an image frame (the element that clips
+   the image). Static, pointer-transparent, clipped by the frame.
+   Not used on logos, icons, text or UI.
+   --------------------------------------------------------------- */
+:root {
+  --grain-opacity: 0.3;
+  --grain-size: 180px;
+}
+.film-grain {
+  isolation: isolate; /* grain blends with the image only, not the page */
+}
+.film-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='1.8' intercept='-0.4'/%3E%3CfeFuncG type='linear' slope='1.8' intercept='-0.4'/%3E%3CfeFuncB type='linear' slope='1.8' intercept='-0.4'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"); */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 2.2 0 0 0 -0.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: var(--grain-size) var(--grain-size);
+  mix-blend-mode: overlay;
+  opacity: var(--grain-opacity);
+}
+
+/* ---------------------------------------------------------------
+   Text reveal: data-reveal="rise" (opacity + blur from [data-reveal],
+   plus a small upward settle). Triggered once by RevealObserver.
+   Easing/duration match the footer link animation.
+   --------------------------------------------------------------- */
+[data-reveal="rise"] {
+  transform: translateY(10px);
+  transition:
+    opacity 650ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+    filter 550ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+    transform 800ms cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms);
+}
+[data-reveal="rise"][data-revealed] {
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal="rise"] {
+    transform: none !important;
   }
 }
 

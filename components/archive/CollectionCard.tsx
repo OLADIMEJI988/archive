@@ -1,22 +1,22 @@
 "use client";
 import { useState } from "react";
-export type Collection = { title: string; description: string; image: string };
-// Default: image + title + plus. Overlay and description animate in on hover (or keyboard focus). No click handling.
+export type Collection = { title: string; description: string; image: string }
 export function CollectionCard({ title, description, image }: Collection) {
   return (
     <article
       tabIndex={0}
       aria-label={`${title}. ${description}`}
       data-collection={title.toLowerCase()}
-      className="group relative block aspect-[4/5] w-full overflow-hidden bg-ink-850"
+      className="group relative cursor-pointer block aspect-[4/5] w-full overflow-hidden bg-ink-850"
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={image}
-        alt={`${title} collection`}
-        loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
+      <div className="film-grain absolute inset-0">
+        <img
+          src={image}
+          alt={`${title} collection`}
+          loading="lazy"
+          className="h-full w-full object-cover"
+        />
+      </div>
       <span
         aria-hidden="true"
         className="absolute inset-0 bg-ink-950/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"

@@ -4,6 +4,7 @@ type Props = {
   sentence: string;
   active: boolean;
   onActivate: () => void;
+  revealDelay?: number;
 };
 
 export function ArchiveCategoryRow({
@@ -11,9 +12,13 @@ export function ArchiveCategoryRow({
   sentence,
   active,
   onActivate,
+  revealDelay = 0,
 }: Props) {
   return (
-    <li>
+    <li
+      data-reveal="rise"
+      style={{ "--d": `${revealDelay}ms` } as React.CSSProperties}
+    >
       <button
         type="button"
         data-active={active}

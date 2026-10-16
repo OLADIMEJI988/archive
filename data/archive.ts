@@ -4,7 +4,7 @@ export const collections = [
   {
     title: "Photography",
     description:
-      "Documentary work, portraits, and the people and places seen through the lens.",
+      "Documentary work, portraits, the people and places seen through the lens.",
     image: img("Image@2x (3).webp"),
   },
   {

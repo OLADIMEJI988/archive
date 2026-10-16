@@ -28,9 +28,10 @@ export function AcrossArchive() {
         <div className="flex min-w-0 flex-1 flex-col gap-10">
           <SectionHeading id="across-h">Across the archive</SectionHeading>
           <ul className="-my-5 flex flex-col">
-            {categories.map((c) => (
+            {categories.map((c, i) => (
               <ArchiveCategoryRow
                 key={c.title}
+                revealDelay={Math.min(i, 4) * 70}
                 title={c.title}
                 sentence={c.sentence}
                 active={active === c.title}

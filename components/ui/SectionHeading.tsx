@@ -1,3 +1,7 @@
+"use client";
+
+import type { MouseEvent } from "react";
+
 export function SectionHeading({
   id,
   children,
@@ -7,6 +11,13 @@ export function SectionHeading({
   children: React.ReactNode;
   action?: string;
 }) {
+  const restartUnderline = (e: MouseEvent<HTMLAnchorElement>) => {
+    const el = e.currentTarget;
+    el.classList.remove("is-animating");
+    void el.offsetWidth; // force reflow so the animation restarts from 0%
+    el.classList.add("is-animating");
+  };
+
   return (
     <div className="flex items-end justify-between gap-6">
       <h2
@@ -17,7 +28,11 @@ export function SectionHeading({
         {children}
       </h2>
       {action && (
-        <span className="border-b-[0.67px] border-white pb-1 text-[16px] uppercase leading-[19px]">
+        <span
+          className="footer-underline-link cursor-pointer border-white pb-1 text-[16px] uppercase leading-[19px]"
+          onMouseEnter={restartUnderline}
+          onMouseLeave={restartUnderline}
+        >
           {action}
         </span>
       )}

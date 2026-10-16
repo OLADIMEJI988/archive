@@ -6,7 +6,7 @@ type Props = {
 // All images stay mounted and crossfade; fixed aspect box prevents layout shift.
 export function FeaturedArchiveImage({ images, activeKey }: Props) {
   return (
-    <div className="relative aspect-[280.83/349.02] w-full max-w-none shrink-0 overflow-hidden bg-ink-850 sm:max-w-[290.83px]">
+    <div className="film-grain relative aspect-[280.83/349.02] w-full max-w-none shrink-0 overflow-hidden bg-ink-850 sm:max-w-[290.83px]">
       {images.map((i) => (
         // eslint-disable-next-line @next/next/no-img-element
         <img

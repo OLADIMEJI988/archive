@@ -58,7 +58,7 @@ export default function RootLayout({
       <head>
         <noscript>
           <style>
-            {`[data-reveal]{opacity:1!important;filter:none!important}[data-reveal-title]{transform:none!important;filter:none!important}.hero-reveal{animation:none!important}`}
+            {`[data-reveal]{opacity:1!important;filter:none!important;transform:none!important}[data-reveal-title]{transform:none!important;filter:none!important}.hero-reveal{animation:none!important}`}
           </style>
         </noscript>
       </head>

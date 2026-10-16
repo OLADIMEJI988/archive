@@ -17,15 +17,19 @@ export function CursorImageTrail({
       className="pointer-events-none absolute inset-0 overflow-hidden"
     >
       {items.map((i) => (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <div
           key={i.id}
-          src={i.src}
-          alt=""
-          width={i.w}
           style={{ left: i.x, top: i.y, width: i.w, aspectRatio: "4/5" }}
-          className="trail-img absolute -translate-x-1/2 -translate-y-1/2 object-cover"
-        />
+          className="trail-img film-grain absolute -translate-x-1/2 -translate-y-1/2"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={i.src}
+            alt=""
+            width={i.w}
+            className="block h-full w-full object-cover"
+          />
+        </div>
       ))}
     </div>
   );
