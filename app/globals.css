@@ -346,7 +346,7 @@ button:focus-visible,
    Not used on logos, icons, text or UI.
    --------------------------------------------------------------- */
 :root {
-  --grain-opacity: 0.3;
+  --grain-opacity: 0.2;
   --grain-size: 180px;
 }
 .film-grain {

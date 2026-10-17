@@ -6,7 +6,7 @@ export function AboutMuseum() {
     <section
       id="about"
       aria-labelledby="about-h"
-      className="px-[var(--page-margin)] py-[var(--section-pad)]"
+      className="px-[var(--page-margin)] py-[var(--section-pad)] pt-[90px]"
     >
       <div className="container-archive flex flex-col justify-between gap-10 md:flex-row">
         <div className="flex min-w-0 flex-1 flex-col gap-10">

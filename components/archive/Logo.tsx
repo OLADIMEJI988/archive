@@ -14,9 +14,9 @@ export function LogoMark({
       className={className}
       fill="currentColor"
     >
-      <polygon points="17.07,10 102.93,10 60,52.93" />
-      <polygon points="10,17.07 55,62.07 55,110 10,110" />
-      <polygon points="110,17.07 65,62.07 65,110 110,110" />
+      <polygon data-logo-part="top" points="17.07,10 102.93,10 60,52.93" />
+      <polygon data-logo-part="left" points="10,17.07 55,62.07 55,110 10,110" />
+      <polygon data-logo-part="right" points="110,17.07 65,62.07 65,110 110,110" />
     </svg>
   );
 }

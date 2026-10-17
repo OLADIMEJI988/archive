@@ -60,6 +60,26 @@ export const featured = [
     image: img("Image@2x (2).webp"),
   },
 ];
+export const showcase = [
+  {
+    image: img("OIP (8).webp"),
+  },
+  {
+    image: img("afriwoman.jpg"),
+  },
+  {
+    image: img("bigassearrings.webp"),
+  },
+  {
+    image: img("OIP (10).webp"),
+  },
+  {
+    image: img("africanwoman.webp"),
+  },
+  {
+    image: img("OIP (7).webp"),
+  },
+];
 export const people: {
   title: string;
   caption: string;

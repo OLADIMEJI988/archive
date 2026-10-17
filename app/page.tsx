@@ -7,6 +7,7 @@ import { Collections } from "@/components/sections/Collections";
 import { People } from "@/components/sections/People";
 import { AcrossArchive } from "@/components/sections/AcrossArchive";
 import { AboutMuseum } from "@/components/sections/AboutMuseum";
+import { CinematicShowcase } from "@/components/sections/CinematicShowcase";
 import { RevealObserver } from "@/components/layout/RevealObserver";
 export default function Home() {
   // The hero is sticky; this opaque, higher-stacked wrapper is what scrolls up and over it.
@@ -22,6 +23,7 @@ export default function Home() {
           <Collections />
           <People />
           <AcrossArchive />
+          <CinematicShowcase />
           <AboutMuseum />
         </div>
       </main>
