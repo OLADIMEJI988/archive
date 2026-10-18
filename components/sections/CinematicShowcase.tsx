@@ -131,7 +131,7 @@ function buildSurfaces(c: Cfg): Surface[] {
   const cap = 64 * q; // former caption strip; kept so pictures stay exactly where they were
   const panel = (i: number) => (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={IMAGES[i].src} alt={IMAGES[i].alt} decoding="async" className="block h-full w-full object-cover" draggable={false} />
+    <img src={IMAGES[i].src} alt={IMAGES[i].alt} decoding="async" className="block h-full w-full object-cover object-top" draggable={false} />
   );
   const word = (t: string, size: number) => (
     <span style={{ fontSize: size * q * (q < 1 ? 1.1 : 1), whiteSpace: "nowrap" }} className={`${display} block text-center text-white/40`}>{t}</span>
