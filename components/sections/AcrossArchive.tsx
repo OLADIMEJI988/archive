@@ -19,7 +19,7 @@ export function AcrossArchive() {
     <section
       id="across"
       aria-labelledby="across-h"
-      className="px-[var(--page-margin)] py-[var(--section-pad)]"
+      className="px-[var(--page-margin)] py-[var(--section-pad)] min-[200px]:max-[500px]:pb-[90px]"
     >
       <div
         className="container-archive flex flex-col justify-between gap-10 md:flex-row"

@@ -386,7 +386,7 @@ export function CinematicShowcase() {
           <div className="flex flex-col gap-4">
             <p className="text-[16px] uppercase leading-[19.2px] text-[#A6A6A6]">The showcase</p>
             <h2 className="text-[clamp(30px,5vw,48px)] font-medium uppercase leading-none tracking-display">Enter the archive</h2>
-            <p className="max-w-[450px] text-[18px] leading-[21.6px]">A walk through the artifacts, portraits and people the Archive holds.</p>
+            <p className="max-w-[450px] text-[18px] leading-[21.6px]">A walk through some of the artifacts, portraits and artworks preserved within the Archive.</p>
           </div>
           {IMAGES.map((im) => (
             <figure key={im.src} className="flex flex-col items-center gap-3">
