@@ -23,13 +23,13 @@ export function Hero() {
         >
           <h1
             id="hero-title"
-            className="hero-reveal text-[clamp(40px,8vw,79.2px)] font-medium uppercase leading-none tracking-display"
+            className="hero-reveal text-[clamp(46px,9.5vw,100px)] font-medium uppercase leading-none tracking-display"
           >
             Nigerian creative history
           </h1>
           <p
             style={{ "--d": "90ms" } as React.CSSProperties}
-            className="hero-reveal min-[200px]:max-[500px]:leading-[1.4] sm:text-[12px] text-[16px] min-[200px]:max-[500px]:text-[14px] min-[200px]:max-[500px]:w-[340px] uppercase leading-[11.5px]"
+            className="hero-reveal min-[200px]:max-[500px]:leading-[1.4] sm:text-[15px] text-[19px] min-[200px]:max-[500px]:text-[16px] min-[200px]:max-[500px]:w-[min(300px,100%)] uppercase leading-[14.5px]"
           >
             A digital museum of photography, music, fashion, and design.
           </p>

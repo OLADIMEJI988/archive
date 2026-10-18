@@ -29,6 +29,9 @@ const LOGO_END = 0.55; // the logo's three shapes have finished scattering by he
 const ROOM_FROM = 0.1; // the room starts to emerge from the black as the shapes begin to leave...
 const ROOM_TO = 0.6; // ...and is fully present here
 const LOGO_FILL = 0.5; // logo size as a share of the preview window's shorter side
+const TEXT_FROM = 0.05; // intro copy (outside the window) starts to give way here...
+const TEXT_TO = 0.3; // ...and is gone here, before the growing window can reach it. Same q as the logo.
+const TEXT_DRIFT = 28; // px each side drifts outward while it fades
 const FLY = 0.55; // each shape travels this share of the preview window (height for top, width for sides)
 
 type Wall = "L" | "R" | "F" | "C" | "B"; // left, right, floor, ceiling, back
@@ -178,6 +181,8 @@ export function CinematicShowcase() {
   const words = useRef<HTMLDivElement>(null);
   const fade = useRef<HTMLDivElement>(null);
   const logo = useRef<HTMLDivElement>(null);
+  const introA = useRef<HTMLDivElement>(null);
+  const introB = useRef<HTMLDivElement>(null);
   const els = useRef<(HTMLDivElement | null)[]>([]);
 
   // Portrait phones and tablets get their own room proportions instead of a squeezed desktop one.
@@ -192,6 +197,7 @@ export function CinematicShowcase() {
   useEffect(() => {
     const hostEl = host.current, frameEl = frame.current, sceneEl = scene.current, worldEl = world.current;
     const wordsEl = words.current, fadeEl = fade.current, logoEl = logo.current;
+    const introAEl = introA.current, introBEl = introB.current; // copy beside the preview window
     if (!hostEl || !frameEl || !sceneEl || !worldEl || !wordsEl || !fadeEl || !logoEl) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; // static version shown instead
     const c = cfg;
@@ -226,7 +232,7 @@ export function CinematicShowcase() {
       // keeps a mask layer over the whole 3D scene, which some mobile GPUs draw as black rectangles.
       frameEl.style.clipPath = e >= 0.999
         ? "none"
-        : `inset(${((vh - h) / 2).toFixed(1)}px ${((vw - w) / 2).toFixed(1)}px round ${(4 * (1 - e)).toFixed(2)}px)`;
+        : `inset(${((vh - h) / 2).toFixed(1)}px ${((vw - w) / 2).toFixed(1)}px round ${(8 * (1 - e)).toFixed(2)}px)`;
       sceneEl.style.transform = `translate(-50%,-50%) scale(${((k0 + (1 - k0) * e) * s).toFixed(4)})`;
       wordsEl.style.opacity = smoother(clamp((e - 0.6) / 0.35)).toFixed(3);
 
@@ -245,6 +251,17 @@ export function CinematicShowcase() {
       fly(right, ww * FLY, 0);
       logoEl.style.visibility = o >= 1 ? "hidden" : "";
       sceneEl.style.opacity = smoother(clamp((q - ROOM_FROM) / (ROOM_TO - ROOM_FROM))).toFixed(3);
+
+      // Intro copy: a separate layer under the window. It only reads q and never feeds back into any
+      // of the values above, so it cannot change the animation. Each side drifts away and fades.
+      if (introAEl && introBEl) {
+        const t = smoother(clamp((q - TEXT_FROM) / (TEXT_TO - TEXT_FROM)));
+        const dx = c.stack ? 0 : t * TEXT_DRIFT, dy = c.stack ? t * TEXT_DRIFT : 0;
+        introAEl.style.opacity = introBEl.style.opacity = (1 - t).toFixed(3);
+        introAEl.style.transform = t === 0 ? "" : `translate(${-dx}px, ${-dy}px)`;
+        introBEl.style.transform = t === 0 ? "" : `translate(${dx}px, ${dy}px)`;
+        introAEl.style.visibility = introBEl.style.visibility = t >= 1 ? "hidden" : "";
+      }
 
       // Camera: one point travelling a smooth path down the room.
       const g = clamp((p - JOURNEY[0]) / (JOURNEY[1] - JOURNEY[0]));
@@ -291,7 +308,31 @@ export function CinematicShowcase() {
         className="pointer-events-none relative -mt-[20vh] h-[calc(100vh+var(--sc-extra))] [--sc-extra:620vh] supports-[height:100svh]:-mt-[20svh] supports-[height:100svh]:h-[calc(100svh+var(--sc-extra))] max-lg:[--sc-extra:500vh] motion-reduce:hidden"
       >
         <div className="sticky top-0 h-screen overflow-hidden supports-[height:100svh]:h-[100svh]">
-          <div ref={frame} className="absolute inset-0 bg-[#080808]" style={{ clipPath: "inset(40% 38% round 4px)" }}>
+          {/* Intro copy. Its own layer under the window (absolute, so it takes no space), faded by the
+              same progress value; pointer-events-none so it never blocks scrolling or taps. */}
+          <div className="pointer-events-none absolute inset-0 px-[var(--page-margin)]">
+            <div className={`container-archive relative h-full ${cfg.stack ? "" : "flex items-center justify-between"}`}>
+              <div
+                ref={introA}
+                className={cfg.stack
+                  ? "absolute inset-x-0 bottom-[calc(50%+17svh+28px)] flex flex-col items-center gap-4 text-center"
+                  : "flex w-[min(340px,calc(36vw-var(--page-margin)-32px))] flex-col gap-4"}
+              >
+                <p className="text-[16px] uppercase leading-[19.2px] text-[#A6A6A6]">The showcase</p>
+                <h2 className="text-[clamp(30px,5vw,48px)] font-medium uppercase leading-none tracking-display">Enter the archive</h2>
+              </div>
+              <div
+                ref={introB}
+                className={cfg.stack
+                  ? "absolute inset-x-0 top-[calc(50%+17svh+28px)] flex flex-col items-center gap-6 text-center"
+                  : "flex w-[min(280px,calc(36vw-var(--page-margin)-32px))] flex-col gap-6"}
+              >
+                <p className="max-w-[280px] text-[18px] leading-[21.6px]">A walk through some of the artifacts, portraits and artworks preserved within the Archive.</p>
+                <p className="text-[16px] uppercase leading-[19.2px] text-[#A6A6A6]">Scroll to enter</p>
+              </div>
+            </div>
+          </div>
+          <div ref={frame} className="absolute inset-0 bg-[#080808]" style={{ clipPath: "inset(40% 38% round 8px)" }}>
             <div
               ref={scene}
               className="absolute left-1/2 top-1/2"
@@ -342,6 +383,11 @@ export function CinematicShowcase() {
         className="hidden bg-[#080808] px-[var(--page-margin)] py-[var(--section-pad)] motion-reduce:block"
       >
         <div className="container-archive flex flex-col gap-10">
+          <div className="flex flex-col gap-4">
+            <p className="text-[16px] uppercase leading-[19.2px] text-[#A6A6A6]">The showcase</p>
+            <h2 className="text-[clamp(30px,5vw,48px)] font-medium uppercase leading-none tracking-display">Enter the archive</h2>
+            <p className="max-w-[450px] text-[18px] leading-[21.6px]">A walk through the artifacts, portraits and people the Archive holds.</p>
+          </div>
           {IMAGES.map((im) => (
             <figure key={im.src} className="flex flex-col items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}

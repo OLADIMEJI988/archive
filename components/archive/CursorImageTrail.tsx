@@ -20,7 +20,7 @@ export function CursorImageTrail({
         <div
           key={i.id}
           style={{ left: i.x, top: i.y, width: i.w, aspectRatio: "4/5" }}
-          className="trail-img film-grain absolute -translate-x-1/2 -translate-y-1/2"
+          className="trail-img absolute -translate-x-1/2 -translate-y-1/2"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
